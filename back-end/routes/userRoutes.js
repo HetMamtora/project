@@ -4,5 +4,7 @@ const userController = require('../controllers/userController'); // Check import
 
 // Route for user registration
 router.post('/register', userController.register);
+router.post('/login',userController.login);
+router.get('/refresh_token', userController.refreshtoken);
 
 module.exports = router;
