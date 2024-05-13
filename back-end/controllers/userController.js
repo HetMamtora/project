@@ -94,7 +94,7 @@ const userController = {
 
     updateUser: async (req, res) => {
         try {
-            const { id } = req.params; // Get the user ID from request parameters
+            /*const { id } = req.params; // Get the user ID from request parameters
             const { role } = req.user; // Get the role attribute of the logged-in user
 
             // If user is not an admin, return an error
@@ -102,7 +102,7 @@ const userController = {
                 return res.status(403).json({ msg: "Only admins can update user profiles" });
             }
 
-            // If an admin, proceed with updating the user profile
+            // If an admin, proceed with updating the user profile*/
             const updatedUser = await Users.findByIdAndUpdate(id, req.body, { new: true });
 
             if (!updatedUser) {
@@ -113,6 +113,20 @@ const userController = {
         } catch (error) {
             console.error(error);
             return res.status(500).json({ msg: "Internal server error" });
+        }
+    },
+
+    getAllUsers: async(req,res) => {
+        try{
+            const allUsers = await Users.find().select('-password')
+
+            if(!allUsers){
+                return res.status(400).json({msg:"User Not Found"})
+            }
+            res.json(allUsers)
+        }
+        catch(err){
+            return res.status(500).json({msg:err.message})
         }
     },
 

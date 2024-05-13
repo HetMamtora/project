@@ -9,7 +9,8 @@ router.post('/register', userController.register);
 router.post('/login',userController.login);
 router.get('/refresh_token', userController.refreshtoken);
 router.put('/:id', auth, authAdmin, userController.updateUser);
-router.get('/allusers',auth, authAdmin,userController.getUser)
+router.get('/information',auth,userController.getUser)
+router.get('/getallusers',auth,authAdmin,userController.getAllUsers)
 
 
 module.exports = router;
