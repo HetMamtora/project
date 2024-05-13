@@ -1,8 +1,8 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const connectDB = require('./db')
 
 const userRoutes = require('./routes/userRoutes');
+const cookieParser = require('cookie-parser');
 
 const app = express()
 require('dotenv').config()
@@ -13,6 +13,7 @@ connectDB()
 //Middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
+app.use(cookieParser())
 
 //Routes
 app.use('/user', userRoutes);

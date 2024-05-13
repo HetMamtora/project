@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const userController = {
 
-        refreshtoken: async(req,res) => {
+    refreshtoken: async(req,res) => {
             try{
                 const rf_token = req.cookies.refreshtoken;
                 
@@ -25,7 +25,7 @@ const userController = {
             catch(err){
                 return res.status(500).json({msg:err.message})
             }
-        },
+    },
 
     register: async (req, res) => {
         try{
@@ -57,7 +57,7 @@ const userController = {
     login: async(req,res) => {
         try {
             const { email, password } = req.body;
-            
+
             const user = await Users.findOne({ email });
             if (!user) {
                 return res.status(400).json({ msg: "User does not exist" });
@@ -91,6 +91,44 @@ const userController = {
             return res.status(500).json({msg:error.message});
         }
     },
+
+    updateUser: async (req, res) => {
+        try {
+            const { id } = req.params; // Get the user ID from request parameters
+            const { role } = req.user; // Get the role attribute of the logged-in user
+
+            // If user is not an admin, return an error
+            if (role !== 1) {
+                return res.status(403).json({ msg: "Only admins can update user profiles" });
+            }
+
+            // If an admin, proceed with updating the user profile
+            const updatedUser = await Users.findByIdAndUpdate(id, req.body, { new: true });
+
+            if (!updatedUser) {
+                return res.status(404).json({ msg: "User not found" });
+            }
+
+            res.json({ msg: "User profile updated successfully", user: updatedUser });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ msg: "Internal server error" });
+        }
+    },
+
+    getUser: async(req,res) => {
+        try{
+            const user = await Users.findById(req.user.id).select('-password')
+
+            if(!user){
+                return res.status(400).json({msg:"User Not Found"})
+            }
+            res.json(user)
+        }
+        catch(err){
+            return res.status(500).json({msg:err.message})
+        }
+    }
 }
 
 
