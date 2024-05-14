@@ -134,6 +134,23 @@ const userController = {
             return res.status(500).json({ msg: "Internal server error" });
         }
     },
+
+    deleteUser: async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            const deletedUser = await Users.findByIdAndDelete(id);
+            if(!deletedUser){
+                return res.status(404).json({ msg: "User not found" });
+            }
+
+            res.json({ msg: "User deleted successfully" });
+        }
+        catch (error){
+            console.error(error);
+            return res.status(500).json({ msg: "Internal server error" });
+        }
+    }
 }
 
 
