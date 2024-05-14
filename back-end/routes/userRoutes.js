@@ -11,6 +11,7 @@ router.get('/refresh_token', userController.refreshtoken);
 router.put('/:id', auth, authAdmin, userController.updateUser);
 router.get('/information',auth,userController.getUser)
 router.get('/getallusers',auth,authAdmin,userController.getAllUsers)
+router.delete('/:id', auth, authAdmin, userController.deleteUser);
 
 
 module.exports = router;
