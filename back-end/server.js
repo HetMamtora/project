@@ -2,6 +2,7 @@ const express = require('express')
 const connectDB = require('./db')
 
 const userRoutes = require('./routes/userRoutes');
+const chatRoomRoutes = require('./routes/chatRoomRoutes')
 const cookieParser = require('cookie-parser');
 
 const app = express()
@@ -17,6 +18,7 @@ app.use(cookieParser())
 
 //Routes
 app.use('/user', userRoutes);
+app.use('/api/chatrooms', chatRoomRoutes)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
