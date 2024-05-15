@@ -1,4 +1,4 @@
-const Users = require('../models/userModel'); // Ensure correct casing
+const Users = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
