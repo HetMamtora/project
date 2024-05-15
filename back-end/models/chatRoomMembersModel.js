@@ -12,4 +12,4 @@ const ChatRoomMembersSchema = new mongoose.Schema({
     }]
 })
 
-module.exports = mongoose.model('ChatRoomMembers', ChatRoomMembersSchema)
+module.exports = mongoose.model('ChatRoomMembersModel', ChatRoomMembersSchema)
