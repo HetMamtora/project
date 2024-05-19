@@ -4,12 +4,19 @@ const ChatRoomMembersSchema = new mongoose.Schema({
     chatRoomId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatRoom',
-        required: true
-    },
-    members: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
-    }]
+        required: true,
+      },
+      members: [{
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        role: {
+          type: String,
+          default: 'member',
+          enum: ['member', 'cr-admin'],
+        }
+      }],
 })
 
 module.exports = mongoose.model('ChatRoomMembersModel', ChatRoomMembersSchema)
