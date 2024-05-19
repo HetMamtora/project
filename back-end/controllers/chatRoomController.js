@@ -56,48 +56,49 @@ const chatRoomController = {
     },
 
     closeChatRoom:  async(req,res) => {
-        try {
+        try{
             const loggedInUser = req.user;
         
-            if (!loggedInUser) {
-              return res.status(401).json({ msg: 'User not authenticated' });
+            if(!loggedInUser){
+                return res.status(401).json({ msg: 'User not authenticated' });
             }
         
             const { chatRoomId } = req.params;
         
-            // Find the chat room by ID
+            //FIND CHAT ROOM - ID 
             const chatRoom = await ChatRoom.findById(chatRoomId);
         
-            if (!chatRoom) {
-              return res.status(404).json({ msg: 'Chat room not found' });
+            if(!chatRoom){
+                return res.status(404).json({ msg: 'Chat room not found' });
             }
         
-            // Find the user's role in the chat room
+            //VERIFY USER ROLE TO DELETE (cr-admin)
             const chatRoomMembers = await ChatRoomMembers.findOne({ chatRoomId });
         
-            if (!chatRoomMembers) {
-              return res.status(404).json({ msg: 'Chat room members not found' });
+            if(!chatRoomMembers){
+                return res.status(404).json({ msg: 'Chat room members not found' });
             }
         
             const userRole = chatRoomMembers.members.find(
-              (member) => member.userId.toString() === loggedInUser._id.toString()
+                (member) => member.userId.toString() === loggedInUser._id.toString()
             );
         
-            if (!userRole || userRole.role !== 'cr-admin') {
-              return res.status(403).json({ msg: 'User is not authorized to close this chat room' });
+            if(!userRole || userRole.role !== 'cr-admin'){
+                return res.status(403).json({ msg: 'User is not authorized to close this chat room' });
             }
         
-            // Delete the chat room
+            //DELETE CHAT ROOM
             await ChatRoom.findByIdAndDelete(chatRoomId);
         
-            // Delete the members of the chat room
+            //DELETE CHAT ROOM MEMBERS
             await ChatRoomMembers.findOneAndDelete({ chatRoomId });
         
             res.json({ msg: 'Chat room closed and members removed' });
-          } catch (error) {
+          }
+          catch(error){
             console.error("Error message:", error.message);
             res.status(500).send('Server Error');
-          }
+        }
     }
 }
 
