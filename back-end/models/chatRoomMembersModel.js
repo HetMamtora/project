@@ -11,6 +11,10 @@ const ChatRoomMembersSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
         },
+        name: {
+          type: String,
+          required: true,
+        },
         role: {
           type: String,
           default: 'member',

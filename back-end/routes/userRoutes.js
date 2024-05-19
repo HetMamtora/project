@@ -7,6 +7,7 @@ const authAdmin = require ('../middleware/authAdmin')
 //ROUTES
 router.post('/register', userController.register);
 router.post('/login',userController.login);
+router.get('/logout', userController.userLogout);
 router.get('/refresh_token', userController.refreshtoken);
 router.put('/:id', auth, authAdmin, userController.updateUser);
 router.get('/information',auth,userController.getUser)
