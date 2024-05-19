@@ -6,16 +6,12 @@ const chatRoomController = {
     createChatRoom: async(req,res) => {
         try {
             const loggedInUser = req.user;
-            console.log("Logged in user:", loggedInUser);
         
             if (!loggedInUser) {
               return res.status(401).json({ msg: 'User not authenticated' });
             }
-        
+
             const { name, members } = req.body;
-            console.log("Chat room name:", name);
-            console.log("Chat room members:", members);
-        
             if (!name) {
               return res.status(400).json({ msg: 'Chat room name is required' });
             }
@@ -26,7 +22,6 @@ const chatRoomController = {
               members: members || [],
               admin: loggedInUser._id,
             });
-            console.log("ChatRoom object:", chatRoom);
         
             await chatRoom.save();
         
@@ -40,14 +35,12 @@ const chatRoomController = {
               chatRoomId: chatRoom._id,
               members: chatRoomMembersData,
             });
-            console.log("ChatRoomMembers object:", chatRoomMembers);
         
             await chatRoomMembers.save();
         
             res.json(chatRoom);
           } catch (error) {
             console.error("Error message:", error.message);
-            console.error("Stack trace:", error.stack);
             res.status(500).send('Server Error');
           }
     },
