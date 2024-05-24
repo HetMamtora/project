@@ -56,6 +56,51 @@ const chatRoomController = {
         }
     },
 
+    getChatRoomDetails: async(req,res) => {
+        try {
+            const loggedInUser = req.user;
+            const { chatRoomId } = req.params;
+    
+            if (!loggedInUser) {
+                return res.status(401).json({ msg: 'User not authenticated' });
+            }
+    
+            // Check if the chat room exists
+            const chatRoom = await ChatRoom.findById(chatRoomId);
+            if (!chatRoom) {
+                return res.status(404).json({ msg: 'Chat room not found' });
+            }
+    
+            // Check if the logged-in user is a member of the chat room
+            const chatRoomMembers = await ChatRoomMembers.findOne({ chatRoomId });
+            if (!chatRoomMembers) {
+                return res.status(404).json({ msg: 'Chat room members not found' });
+            }
+    
+            const isMember = chatRoomMembers.members.some(member => member.userId.toString() === loggedInUser._id.toString());
+            if (!isMember) {
+                return res.status(403).json({ msg: 'User is not a member of this chat room' });
+            }
+    
+            // Get member details
+            const memberDetails = chatRoomMembers.members.map(member => ({
+                username: member.username,
+                role: member.role
+            }));
+    
+            res.json({
+                chatRoom: {
+                    id: chatRoom._id,
+                    name: chatRoom.name,
+                    members: memberDetails
+                }
+            });
+        } catch (error) {
+            console.error("Error message:", error.message);
+            res.status(500).send('Server Error');
+        }
+    },
+
     closeChatRoom:  async(req,res) => {
         try{
             const loggedInUser = req.user;
