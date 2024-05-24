@@ -29,7 +29,7 @@ const userController = {
 
     register: async (req, res) => {
         try{
-            const { name, email, password } = req.body;
+            const { name, username, email, password } = req.body;
             const user = await Users.findOne({email})
             if(user){
                 return res.status(400).json({msg:"Email Already Registered"})
@@ -40,6 +40,7 @@ const userController = {
             const newUser = new Users({
                 name,
                 email,
+                username,
                 password: hashedPassword
             });
 

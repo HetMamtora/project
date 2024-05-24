@@ -26,15 +26,16 @@ const chatRoomController = {
         
             await chatRoom.save();
         
-            const memberDetails = await User.find({ _id: { $in: members } }).select('name');
+            const memberDetails = await User.find({ _id: { $in: members } }).select('name username');
 
             //PREPARE MEMBERS WITH ROLES
             const chatRoomMembersData = [{
                     userId: loggedInUser._id,
                     name: loggedInUser.name,
+                    username: loggedInUser.username,
                     role: 'cr-admin'
                 },
-                ...memberDetails.map(memberId => ({ userId: memberId, name: memberId.name, role: 'member' }))
+                ...memberDetails.map(memberId => ({ userId: memberId, name: memberId.name, username: memberId.username, role: 'member' }))
                 //...memberDetails.map(member=> ({ userId: member._id, name: member.name, role: 'member' }))
             ];
 
