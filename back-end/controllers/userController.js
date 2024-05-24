@@ -5,26 +5,25 @@ const jwt = require('jsonwebtoken')
 const userController = {
 
     refreshtoken: async(req,res) => {
-            try{
-                const rf_token = req.cookies.refreshtoken;
+        try{
+            const rf_token = req.cookies.refreshtoken;
                 
-                if(!rf_token){
-                    return res.status(400).json({msg:"Please Login or Registers"})
+            if(!rf_token){
+                return res.status(400).json({msg:"Please Login or Registers"})
+            }
+
+            jwt.verify(rf_token,process.env.REFRESH_TOKEN_SECRET,(error,user) => {
+                if(error){
+                    return res.status(400).json({msg:"Please Login or Register"})   
                 }
-
-                jwt.verify(rf_token,process.env.REFRESH_TOKEN_SECRET,(error,user) => {
-                    if(error){
-                        return res.status(400).json({msg:"Please Login or Register"})   
-                    }
                     
-                    const accesstoken = createAccessToken({id:user.id})
-                    res.json({accesstoken})
-                })
-
-            }
-            catch(error){
-                return res.status(500).json({msg:error.message})
-            }
+                const accesstoken = createAccessToken({id:user.id})
+                res.json({accesstoken})
+            })
+        }
+        catch(error){
+            return res.status(500).json({msg:error.message})
+        }
     },
 
     register: async (req, res) => {
